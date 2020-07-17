@@ -1,0 +1,27 @@
+{
+  "name": "template-svelte-project",
+  "version": "0.0.0",
+  "description": "Template for simple-project-generator to bootstrap Svelte projects ",
+  "main": "prompt.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goliatone/template-svelte-project.git"
+  },
+  "keywords": [
+    "simple-project-generator",
+    "svelte",
+    "template"
+  ],
+  "author": "Goliatone <hello@goliatone.com> (http://goliatone.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/goliatone/template-svelte-project/issues"
+  },
+  "homepage": "https://github.com/goliatone/template-svelte-project#readme",
+  "dependencies": {
+    "slug": "^0.9.1"
+  }
+}
