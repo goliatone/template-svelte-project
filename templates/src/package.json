@@ -17,9 +17,11 @@
     "simple-project-generator"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "rimraf build && rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public"
+    "test": "./node_modules/.bin/bogota",
+    "start": "sirv build",
+    "postbuild": "node postbuild.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^14.0.0",
