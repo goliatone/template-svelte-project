@@ -16,6 +16,7 @@ export default {
         name: 'app',
         file: 'build/bundle.js'
     },
+    context: 'window',
     plugins: [
         replace({
             exclude: 'node_modules/**',
