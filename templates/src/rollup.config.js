@@ -21,8 +21,8 @@ export default {
         replace({
             exclude: 'node_modules/**',
             values: {
-                VERSION: require('./package.json').version,
-                ENVIRONMENT: production ? 'production' : 'development',
+                __VERSION__: require('./package.json').version,
+                __ENVIRONMENT__: production ? 'production' : 'development',
             }
         }),
         copy({ targets: [{ src: 'public/*', dest: 'build' }] }),
@@ -69,18 +69,23 @@ export default {
 };
 
 function serve() {
-    let started = false;
+    let server;
+
+    function toExit() {
+        if (server) server.kill(0);
+    }
 
     return {
         writeBundle() {
-            if (!started) {
-                started = true;
+            if (server) return
 
-                require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
-                    stdio: ['ignore', 'inherit', 'inherit'],
-                    shell: true
-                });
-            }
+            server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
+                stdio: ['ignore', 'inherit', 'inherit'],
+                shell: true
+            });
+
+            process.on('exit', toExit);
+            process.on('SIGTERM', toExit);
         }
     };
 }
