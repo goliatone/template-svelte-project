@@ -1,3 +1,4 @@
+import json from '@rollup/plugin-json';
 import svelte from 'rollup-plugin-svelte';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
@@ -18,6 +19,7 @@ export default {
     },
     context: 'window',
     plugins: [
+        json({}),
         replace({
             exclude: 'node_modules/**',
             values: {
