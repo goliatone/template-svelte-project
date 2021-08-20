@@ -1,6 +1,6 @@
 {
   "name": "template-svelte-project",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Template for simple-project-generator to bootstrap Svelte projects ",
   "main": "prompt.js",
   "scripts": {
