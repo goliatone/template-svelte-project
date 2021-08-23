@@ -17,17 +17,34 @@ export default {
         name: 'app',
         file: 'build/bundle.js'
     },
+
     context: 'window',
+
     plugins: [
+
         json({}),
+
         replace({
+            preventAssignment: true,
             exclude: 'node_modules/**',
             values: {
                 __VERSION__: require('./package.json').version,
                 __ENVIRONMENT__: production ? 'production' : 'development',
             }
         }),
-        copy({ targets: [{ src: 'public/*', dest: 'build' }] }),
+
+        /**
+         * Export assets from public directory
+         * to build directory, which will be served
+         * in development.
+         */
+        copy({
+            targets: [{
+                src: 'public/*',
+                dest: 'build'
+            }]
+        }),
+
         svelte({
             // enable run-time checks when not in production
             dev: !production,
@@ -38,56 +55,38 @@ export default {
             }
         }),
 
-        // If you have external dependencies installed from
-        // npm, you'll most likely need these plugins. In
-        // some cases you'll need additional configuration -
-        // consult the documentation for details:
-        // https://github.com/rollup/plugins/tree/master/packages/commonjs
         resolve({
             browser: true,
             dedupe: ['svelte']
         }),
+
+        /**
+         * If you have external dependencies installed from
+         * npm, you'll most likely need these plugins. 
+         * In some cases you'll need additional configuration.
+         * consult the documentation for details:
+         * https://github.com/rollup/plugins/tree/master/packages/commonjs
+         */
         commonjs(),
 
-        // In dev mode, call `npm run start` once
-        // the bundle has been generated
-        // !production && serve({
-        //     contentBase: ['build'],
-        //     port: 5000
-        // }),
+        /**
+         * Watch the `build` directory and refresh the
+         * browser on changes when not in production.
+         * If you are developing a SPA and need URLs
+         * for internal navigation uncomment `single`.
+         */
+        !production && browsersync({
+            server: 'build',
+            // single: true
+        }),
 
-        // Watch the `public` directory and refresh the
-        // browser on changes when not in production
-        // !production && livereload({ watch: 'build' }),
-        !production && browsersync({ server: 'build' }),
-
-        // If we're building for production (npm run build
-        // instead of npm run dev), minify
+        /**
+         * If we're building for production minify.
+         * `npm run build` instead of `npm run dev`.
+         */
         production && terser()
     ],
     watch: {
         clearScreen: false
     }
 };
-
-function serve() {
-    let server;
-
-    function toExit() {
-        if (server) server.kill(0);
-    }
-
-    return {
-        writeBundle() {
-            if (server) return
-
-            server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
-                stdio: ['ignore', 'inherit', 'inherit'],
-                shell: true
-            });
-
-            process.on('exit', toExit);
-            process.on('SIGTERM', toExit);
-        }
-    };
-}
